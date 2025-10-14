@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신규 픽패스 기획안 - 앳홈트립</title>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SUIT Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: #191f28;
+            background: linear-gradient(to bottom, #f7f9fc 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #4e5968;
+            text-decoration: none;
+            font-size: 0.95em;
+            margin-bottom: 32px;
+            transition: all 0.2s;
+            letter-spacing: -0.3px;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: #1a73e8;
+            transform: translateX(-4px);
+        }
+
+        header {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            padding: 48px 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(67, 233, 123, 0.2);
+        }
+
+        .meta-info {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.25);
+            color: #0b823a;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.35);
+            color: #0b823a;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            backdrop-filter: blur(10px);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+            line-height: 1.3;
+        }
+
+        .description {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.7;
+            letter-spacing: -0.3px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            font-size: 1.75em;
+            font-weight: 800;
+            color: #191f28;
+            margin-bottom: 28px;
+            letter-spacing: -0.8px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid #43e97b;
+        }
+
+        h3 {
+            font-size: 1.35em;
+            font-weight: 700;
+            color: #191f28;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        h4 {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #191f28;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        p {
+            color: #4e5968;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            color: #4e5968;
+            line-height: 1.9;
+            margin-bottom: 10px;
+            letter-spacing: -0.3px;
+        }
+
+        li strong {
+            color: #191f28;
+            font-weight: 700;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e0f7fa 0%, #e8f5e9 100%);
+            border-left: 5px solid #43e97b;
+            padding: 24px 28px;
+            margin: 28px 0;
+            border-radius: 12px;
+        }
+
+        .info-box p {
+            margin-bottom: 0;
+            color: #004d40;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 28px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        table th,
+        table td {
+            padding: 18px;
+            text-align: left;
+            border-bottom: 1px solid #e5e8eb;
+            letter-spacing: -0.3px;
+        }
+
+        table th {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.85em;
+        }
+
+        .changelog {
+            background: #f7f9fc;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 28px 0;
+        }
+
+        .changelog-item {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            border-left: 3px solid #43e97b;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #8b95a1;
+            font-size: 0.875em;
+            margin-top: 60px;
+            letter-spacing: -0.3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← 목록으로 돌아가기</a>
+
+        <header>
+            <div class="meta-info">
+                <span class="meta-badge">v0.1</span>
+                <span class="status-badge">초안</span>
+                <span class="meta-badge">2025-10-14</span>
+            </div>
+            <h1>신규 픽패스 기획안</h1>
+            <p class="description">
+                고객에게 더 높은 가치와 편의를 제공하기 위한 '신규 픽패스' 상품 기획안입니다.
+                이 문서는 상품의 정의, 목표, 주요 기능, 기대 효과 등을 포함합니다.
+            </p>
+        </header>
+
+        <!-- 1. 변경 이력 -->
+        <section class="section">
+            <h2>1. 변경 이력</h2>
+            <div class="changelog">
+                <div class="changelog-item">
+                    <p><strong>v0.1</strong> (2025-10-14)</p>
+                    <p>최초 기획안 문서 생성</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 2. 배경 및 목적 -->
+        <section class="section">
+            <h2>2. 배경 및 목적</h2>
+
+            <h3>2.1 프로젝트 배경</h3>
+            <p>
+                현재 제공되는 패스 상품은 선택의 폭이 좁고, 개별 여행객의 다양한 니즈를 충족시키지 못하는 한계가 있습니다. 특히 단기 여행객이나 특정 테마의 여행을 원하는 고객을 위한 맞춤형 상품이 부족합니다.
+            </p>
+
+            <div class="info-box">
+                <p><strong>핵심 인사이트:</strong> 사용자들은 자신만의 여행을 직접 디자인하고 싶어하며, 유연성과 선택권을 중요하게 생각합니다.</p>
+            </div>
+
+            <h3>2.2 프로젝트 목적</h3>
+            <ul>
+                <li><strong>고객 만족도 향상:</strong> 개인의 취향과 일정에 맞는 유연한 패스 상품 제공</li>
+                <li><strong>매출 증대:</strong> 신규 고객층 확보 및 객단가 상승</li>
+                <li><strong>브랜드 강화:</strong> '맞춤형 여행'의 선두주자 이미지 구축</li>
+            </ul>
+
+            <h3>2.3 기대 효과</h3>
+            <ul>
+                <li>픽패스 상품 출시 후 3개월 내 월 매출 15% 증가</li>
+                <li>신규 고객 가입률 10% 증가</li>
+                <li>"원하는 것만 골라 살 수 있어서 좋다" 등 긍정적 고객 리뷰 증대</li>
+            </ul>
+        </section>
+
+        <!-- 3. 현황 분석 -->
+        <section class="section">
+            <h2>3. 현황 분석</h2>
+
+            <h3>3.1 현재 서비스 분석</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>현재 상태</th>
+                        <th>문제점</th>
+                        <th>개선 방향</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>패스 상품</td>
+                        <td>고정된 어트랙션 조합</td>
+                        <td>유연성 부족, 불필요한 상품 포함</td>
+                        <td>DIY '픽패스' 도입</td>
+                    </tr>
+                    <tr>
+                        <td>타겟 고객</td>
+                        <td>일반적인 여행객</td>
+                        <td>특정 니즈 고객층(예: 미술관, 미식) 미흡</td>
+                        <td>테마별 추천 패스 제공</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 4. 주요 기능 -->
+        <section class="section">
+            <h2>4. 주요 기능</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>기능</th>
+                        <th>상세 내용</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>패스 구성하기</td>
+                        <td>고객이 카테고리별 상품 목록에서 원하는 항목을 선택하여 패스를 구성</td>
+                        <td>(예: 전망대 1개 + 박물관 2개 + 투어 1개)</td>
+                    </tr>
+                    <tr>
+                        <td>실시간 가격 계산</td>
+                        <td>선택하는 상품에 따라 최종 패스 가격이 실시간으로 계산 및 할인율 적용</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>추천 패스</td>
+                        <td>여행 테마(예: 가족여행, 나홀로여행)에 따른 추천 패스 조합 제공</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>모바일 바우처</td>
+                        <td>생성된 패스는 모바일 바우처 형태로 즉시 발급</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 5. 사용자 플로우 -->
+        <section class="section">
+            <h2>5. 사용자 플로우 다이어그램</h2>
+            <p>신규 픽패스 구매 및 사용과 관련된 사용자 플로우를 정의합니다.</p>
+            <!-- 여기에 플로우 다이어그램 이미지나 설명 추가 -->
+        </section>
+
+        <!-- 6. 기술 스택 -->
+        <section class="section">
+            <h2>6. 기술 스택 및 아키텍처</h2>
+            <p>개발에 필요한 기술 스택과 시스템 아키텍처를 명시합니다.</p>
+            <!-- 기술 스택 내용 추가 -->
+        </section>
+
+        <!-- 7. 권한 및 보안 -->
+        <section class="section">
+            <h2>7. 권한 및 보안 정책</h2>
+            <p>사용자 역할에 따른 권한과 데이터 보안 정책을 정의합니다.</p>
+            <!-- 권한 및 보안 내용 추가 -->
+        </section>
+
+        <!-- 8. 일정 계획 -->
+        <section class="section">
+            <h2>8. 일정 계획</h2>
+            <p>프로젝트의 주요 마일스톤과 예상 타임라인을 공유합니다.</p>
+            <!-- 일정 계획 내용 추가 -->
+        </section>
+
+        <!-- 9. 리스크 관리 -->
+        <section class="section">
+            <h2>9. 리스크 관리</h2>
+            <p>예상되는 리스크와 대응 방안을 정리합니다.</p>
+            <!-- 리스크 관리 내용 추가 -->
+        </section>
+
+        <!-- 10. 성과 지표 -->
+        <section class="section">
+            <h2>10. 성과 지표 (KPI)</h2>
+            <p>프로젝트의 성공을 측정하기 위한 핵심 성과 지표를 설정합니다.</p>
+            <!-- KPI 내용 추가 -->
+        </section>
+        
+        <footer>
+            <p>© 2025 Athome Trip. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
