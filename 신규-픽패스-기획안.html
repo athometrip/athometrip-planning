@@ -586,6 +586,28 @@
                         <li>정책: Draft ↔ Active ↔ Archived(읽기전용)</li>
                     </ul>
                 </li>
+                <pre><code>[Draft] 
+   │ (Activate)
+   ▼
+[Active]
+   │ \
+   │  \ (Archive)
+   │   ▼
+   │  [Archived]
+   │
+   │ (User Purchase)
+   ▼
+[Pending Payment] → [Paid] → [Active Pass]
+   │                      │
+   │                      ├─> [Partially Used]
+   │                      │        │
+   │                      │        ├─> [Fully Used]
+   │                      │        ├─> [Refunded]
+   │                      │        └─> [Expired]
+   │                      └─> [Refunded]
+   ▼
+[Cancelled]
+</code></pre>
                 <li><strong>가시성:</strong> Archived 정책은 주문 상세 참조용으로만 보존</li>
             </ul>
 
@@ -1313,6 +1335,10 @@
         <section class="section">
             <h2>10. 변경 이력</h2>
             <div class="changelog">
+                <div class="changelog-item">
+                    <p><strong>v2.1</strong> (2025-10-14 15:57 KST)</p>
+                    <p>상태 전이 다이어그램 추가</p>
+                </div>
                 <div class="changelog-item">
                     <p><strong>v2.0</strong> (2025-10-14 15:57 KST)</p>
                     <p>픽패스 어드민(관리자 페이지) 설계 문서 v2 내용 반영</p>
