@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>픽패스 어드민 와이어프레임 – 전체 결과 (5개 샘플 + 이력 포함)</title>
+  <style>
+    :root { --bg:#f6fbff; --panel:#ffffff; --muted:#e6f2ff; --accent:#3b82f6; --line:#cbd5e1; --text:#0f172a; --sub:#475569; }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto}
+
+    /* Remove number spinners */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+
+    /* Layout */
+    .layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+    .gnb{background:var(--muted);border-right:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:8px}
+    .brand{font-weight:800;margin-bottom:12px;color:var(--accent)}
+    .navbtn{padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);cursor:pointer;text-align:left;color:var(--text);transition:background .2s}
+    .navbtn:hover{background:#e0f2fe}
+    .navbtn.active{background:var(--accent);color:#fff;border-color:transparent}
+
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--panel);border-bottom:1px solid var(--line)}
+    .pill{font-size:12px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;color:var(--sub);background:#eff6ff}
+
+    main{display:block}
+    .content{padding:16px}
+
+    /* Cards */
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+    .card .head{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#f0f9ff}
+    .card .body{padding:16px}
+
+    /* Form */
+    .row{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+    label{font-size:12px;color:var(--sub);min-width:160px}
+    input,select,button{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:10px 12px;font-size:14px}
+    input[readonly]{opacity:.7;background:#f1f5f9}
+    button.primary{background:var(--accent);color:#fff;border:none;font-weight:700;cursor:pointer}
+    button.primary:hover{background:#2563eb}
+    button.ghost{background:var(--panel)}
+    .hint{color:var(--sub);font-size:12px}
+    .status{font-size:12px;font-weight:700;padding:4px 8px;border-radius:999px;background:#dbeafe;color:#1e3a8a}
+
+    table{border-collapse:collapse;width:100%}
+    th,td{border-bottom:1px solid var(--line);padding:10px}
+    th{text-align:left;color:var(--sub);background:#f1f5f9}
+    .scroll-x{overflow-x:auto}
+
+    .split{display:grid;grid-template-columns:1fr 420px;gap:16px}
+    @media (max-width:1100px){.layout{grid-template-columns:1fr}.split{grid-template-columns:1fr}}
+
+    .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#0ea5e9;color:#fff;padding:12px 16px;border-radius:10px;display:none;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="gnb">
+      <div class="brand">AthomeTrip Admin</div>
+      <button class="navbtn active" data-view="policy">픽패스 관리</button>
+      <button class="navbtn" data-view="orders">픽패스 주문 관리</button>
+    </aside>
+
+    <div>
+      <header>
+        <div id="pageTitle">픽패스 관리</div>
+        <div class="pill">환경: Staging</div>
+      </header>
+
+      <main>
+        <!-- ================= POLICY VIEW ================= -->
+        <div class="content" id="view-policy">
+          <div class="card" style="margin-bottom:16px">
+            <div class="head"><div>도시 선택 & 기본 설정</div><span class="status" id="policyStatus">Inactive</span></div>
+            <div class="body">
+              <div class="row">
+                <label for="city">도시</label>
+                <select id="city">
+                  <option value="">도시를 선택하세요</option>
+                  <option value="NYC">뉴욕 (NYC)</option>
+                  <option value="CUN">칸쿤 (CUN)</option>
+                </select>
+                <button class="primary" id="btnCitySelect">선택</button>
+                <span class="hint">도시 선택 후 [선택]을 눌러 설정과 테이블을 로드합니다.</span>
+              </div>
+
+              <div id="basicSettings" style="display:none">
+                <div class="row"><label>정책 ID</label><span class="pill" id="policyId">-</span></div>
+                <div class="row"><label>통화</label><span class="pill">USD ($)</span></div>
+                <div class="row"><label>최소 PICK</label><span class="pill">2</span></div>
+
+                <div class="row"><label for="maxPick">최대 PICK</label><input id="maxPick" type="number" min="2" step="1" value="12" /><span class="hint">변경 시 가격 테이블 행이 동적으로 생성됩니다.</span></div>
+                <div class="row"><label for="adultPP">Adult Premium Plus $</label><input id="adultPP" type="number" min="0" step="0.01" value="0" /></div>
+                <div class="row"><label for="childPP">Child Premium Plus $</label><input id="childPP" type="number" min="0" step="0.01" value="0" /></div>
+                <div class="row"><label for="validity">구매 후 사용 시작 데드라인(일)</label><input id="validity" type="number" min="1" step="1" value="365" /></div>
+                <div class="row"><label for="partialRefund">부분 환불 가능 윈도우(최초 사용 후 일)</label><input id="partialRefund" type="number" min="1" step="1" value="30" /></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="priceCard" style="display:none">
+            <div class="head">
+              <div>가격 테이블 (PICK 별)</div>
+              <div>
+                <button class="ghost" id="btnDraftWarn">버전 업 경고 테스트</button>
+                <button class="primary" id="btnSavePolicy">저장</button>
+              </div>
+            </div>
+            <div class="body">
+              <div class="hint">모든 금액은 USD($), 소수점 2자리까지 입력. 빈 칸이 있으면 저장 불가.</div>
+              <table id="priceTable"><thead><tr><th>PICK</th><th>Adult Price $</th><th>Child Price $</th></tr></thead><tbody id="priceTbody"></tbody></table>
+              <div id="tableMsg" class="hint" style="margin-top:8px"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= ORDERS VIEW ================= -->
+        <div class="content" id="view-orders" style="display:none">
+          <div class="card">
+            <div class="head"><div>주문 리스트</div></div>
+            <div class="body split">
+              <div class="scroll-x">
+                <table id="ordersTable" style="min-width:1400px">
+                  <thead><tr><th>ID</th><th>주문 ID</th><th>닉네임</th><th>구매자명</th><th>전화번호</th><th>이메일</th><th>도시</th><th>타입</th><th>프리미엄+</th><th>사용/총</th><th>유효기간</th><th>업그레이드 기한</th><th>상태</th><th>변경</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <aside class="card" style="height:max-content">
+                <div class="head"><div>주문 상세</div></div>
+                <div class="body" id="detail"><div class="hint">좌측 리스트에서 선택</div></div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <div class="toast" id="toast">저장되었습니다. (변경 이력 기록 완료)</div>
+    </div>
+  </div>
+
+<script>
+/* ---------- Utilities ---------- */
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1800) }
+function pad3(n){ return String(n).padStart(3,'0'); }
+function incPolicyId(id){ const m = id.match(/^(.*?)(\d+)$/); if(!m) return id + '_001'; const prefix = m[1]; const num = parseInt(m[2],10) + 1; return prefix + pad3(num); }
+function randomDigits(n){return Array.from({length:n},()=>Math.floor(Math.random()*10)).join('');}
+function randomName(){const n=['김','이','박','최','정','한','유','장','임','오'];const m=['민수','지현','도윤','예진','서준','하린','지후','다은','하준','유진'];return n[Math.floor(Math.random()*n.length)]+m[Math.floor(Math.random()*m.length)];}
+function randomPhone(){return '010-'+randomDigits(4)+'-'+randomDigits(4);}
+function randomEmail(){const name=['travel','user','guest','happy','noff','picnic','weekend'];const dom=['naver.com','gmail.com','daum.net'];return name[Math.floor(Math.random()*name.length)]+randomDigits(3)+' @'+dom[Math.floor(Math.random()*dom.length)];}
+function randPick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function addMonths(date,months){const d=new Date(date);d.setMonth(d.getMonth()+months);return d;}
+function fmt(d){ if(d instanceof Date) return d.toISOString().split('T')[0]; if(typeof d==='string') return d; return ''; }
+function dPlus(d, days){ const x=new Date(d); x.setDate(x.getDate()+days); return x; }
+
+/* ---------- State ---------- */
+const state = {
+  currentView: 'policy',
+  currentCity: '',
+  tableDirty: false,
+  data: {
+    NYC: { policyId: 'NY_PASS_001', maxPick: 12, adultPP: 0, childPP: 0, validity: 365, partialRefund: 30, prices: {} },
+    CUN: { policyId: 'CUN_PASS_001', maxPick: 10, adultPP: 0, childPP: 0, validity: 365, partialRefund: 30, prices: {} }
+  }
+};
+
+/* ---------- GNB Switching ---------- */
+const views = { policy: $('#view-policy'), orders: $('#view-orders') };
+const pageTitle = $('#pageTitle');
+$$('.navbtn').forEach(btn=>btn.addEventListener('click',()=>{
+  $$('.navbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const v = btn.dataset.view; state.currentView = v;
+  Object.values(views).forEach(el=>el.style.display='none');
+  views[v].style.display='block';
+  pageTitle.textContent = btn.textContent;
+}));
+
+/* ---------- Policy View ---------- */
+const citySel = $('#city');
+const btnCitySelect = $('#btnCitySelect');
+const basicSettings = $('#basicSettings');
+const policyIdEl = $('#policyId');
+const policyStatus = $('#policyStatus');
+const maxPickEl = $('#maxPick');
+const adultPPEl = $('#adultPP');
+const childPPEl = $('#childPP');
+const validityEl = $('#validity');
+const partialRefundEl = $('#partialRefund');
+const priceCard = $('#priceCard');
+const priceTbody = $('#priceTbody');
+const tableMsg = $('#tableMsg');
+let lastMax = 0;
+
+btnCitySelect.addEventListener('click', ()=>{
+  const city = citySel.value;
+  if(!city){ alert('도시를 선택하세요.'); return; }
+  state.currentCity = city;
+  state.tableDirty = false;
+  const s = state.data[city];
+  basicSettings.style.display = 'block';
+  priceCard.style.display = 'block';
+  policyStatus.textContent = 'Active';
+  policyIdEl.textContent = s.policyId;
+  maxPickEl.value = s.maxPick;
+  adultPPEl.value = Number(s.adultPP).toFixed(2);
+  childPPEl.value = Number(s.childPP).toFixed(2);
+  validityEl.value = s.validity;
+  partialRefundEl.value = s.partialRefund;
+  buildPriceRows(s.maxPick, s.prices);
+});
+
+function numInput(val){
+  const i=document.createElement('input');
+  i.type='number'; i.min='0'; i.step='0.01'; i.required=true; i.value=val ?? '';
+  i.addEventListener('input',()=>state.tableDirty=true);
+  return i;
+}
+
+function buildPriceRows(max, prices){
+  priceTbody.innerHTML = '';
+  for(let pick=2; pick<=max; pick++){
+    const tr = document.createElement('tr');
+    const tdPick = document.createElement('td'); tdPick.textContent = `PICK ${pick}`;
+    const tdA = document.createElement('td'); const a = numInput(prices[`A-${pick}`]); tdA.appendChild(a);
+    const tdC = document.createElement('td'); const c = numInput(prices[`C-${pick}`]); tdC.appendChild(c);
+    tr.append(tdPick, tdA, tdC); priceTbody.appendChild(tr);
+  }
+  lastMax = max;
+  tableMsg.textContent = `총 ${max-1}개 행 (PICK 2 ~ ${max})`;
+}
+
+maxPickEl.addEventListener('change', e=>{
+  const next = Math.max(2, parseInt(e.target.value||'2',10));
+  const s = state.data[state.currentCity];
+  if(!s){ e.target.value = 2; return; }
+  if(next < lastMax){ alert('경고: max_pick 감소 시 초과 PICK은 숨김(Draft) 처리되며 정책 버전업이 필요합니다.'); }
+  s.maxPick = next; state.tableDirty = true; buildPriceRows(next, s.prices);
+});
+
+$('#btnSavePolicy').addEventListener('click', ()=>{
+  if(!state.currentCity){ alert('도시를 먼저 선택하세요.'); return; }
+  const inputs = priceTbody.querySelectorAll('input');
+  for(const i of inputs){ if(i.value===''){ alert('모든 가격 칸을 입력하세요.'); return; } }
+  const s = state.data[state.currentCity];
+  s.adultPP = parseFloat(adultPPEl.value||'0');
+  s.childPP = parseFloat(childPPEl.value||'0');
+  s.validity = parseInt(validityEl.value||'365',10);
+  s.partialRefund = parseInt(partialRefundEl.value||'30',10);
+  s.prices = {};
+  let pick = 2;
+  for(const tr of priceTbody.querySelectorAll('tr')){
+    const [a,c] = tr.querySelectorAll('input');
+    s.prices[`A-${pick}`] = parseFloat(a.value);
+    s.prices[`C-${pick}`] = parseFloat(c.value);
+    pick++;
+  }
+  if(state.tableDirty){
+    s.policyId = incPolicyId(s.policyId);
+    policyIdEl.textContent = s.policyId;
+    state.tableDirty = false;
+  }
+  toast('저장되었습니다. (도시 설정 및 테이블 갱신)');
+});
+
+/* ---------- Orders View (5 samples + history) ---------- */
+const orders = [];
+(function seedOrders(){
+  const cities=['NY','CC'];
+  for(let i=0;i<5;i++){
+    const city=randPick(cities);
+    const id=`${city}-${20251000+Math.floor(Math.random()*99)}-${randomDigits(6)}`;
+    const orderId=randomDigits(6);
+    const nickname=randPick(['가족여행','허니문','주말번개','연휴특가','단기체험']);
+    const buyer=randomName(); const phone=randomPhone(); const email=randomEmail();
+    const type=Math.random()>0.5?'Adult':'Child'; const premium=Math.random()>0.5;
+    const used=Math.floor(Math.random()*5); const total=used+Math.floor(Math.random()*5)+1;
+    const purchaseDate=new Date(2025,Math.floor(Math.random()*12),Math.floor(Math.random()*28)+1);
+    const expire=new Date(purchaseDate); expire.setFullYear(expire.getFullYear()+1);
+    const upgradeLimit=addMonths(purchaseDate,2);
+    const status=randPick(['Active','PartiallyUsed','Expired','Refunded']);
+    const base={id,orderId,nickname,buyer,phone,email,city,type,premium,used,total,expire:expire.toISOString().split('T')[0],upgradeLimit:upgradeLimit.toISOString().split('T')[0],status,purchase:purchaseDate.toISOString().split('T')[0]};
+    base.history=buildHistory(base,i); base.selections=buildSelections(base,i);
+    orders.push(base);
+  }
+})();
+
+function buildHistory(o, idx){
+  const p=new Date(o.purchase);
+  switch(idx){
+    case 0: return [
+      {date: fmt(p), type:'구매', memo:`${o.city} ${o.type} ${o.total}픽 구매`, amount:`$${(120+o.total*10).toFixed(2)}`},
+      {date: fmt(dPlus(p,10)), type:'업그레이드', memo:`${o.total}→${o.total+2} 픽 업그레이드`, amount:`+$40.00`},
+      {date: fmt(dPlus(p,25)), type:'상품담기', memo:'Top of the Rock 추가', amount:'$0.00'}];
+    case 1: return [
+      {date: fmt(p), type:'구매', memo:`${o.city} ${o.type} ${o.total}픽 구매`, amount:`$${(95+o.total*8).toFixed(2)}`},
+      {date: fmt(dPlus(p,5)), type:'다운그레이드', memo:`${o.total}→${Math.max(2,o.total-1)} 픽 다운`, amount:`-$12.00`},
+      {date: fmt(dPlus(p,16)), type:'상품담기', memo:'Harbor Cruise 담기', amount:'$5.00'}];
+    case 2: return [
+      {date: fmt(p), type:'구매', memo:`${o.city} ${o.type} ${o.total}픽 구매`, amount:`$${(110+o.total*9).toFixed(2)}`},
+      {date: fmt(dPlus(p,35)), type:'부분환불', memo:'최초 이용 후 30일 내 남은 픽 환불', amount:`-$18.00`}];
+    case 3: return [
+      {date: fmt(p), type:'구매', memo:`${o.city} ${o.type} ${o.total}픽 구매`, amount:`$${(130+o.total*7).toFixed(2)}`},
+      {date: fmt(dPlus(p,3)), type:'상품담기', memo:'Edge NYC 담기', amount:'$0.00'},
+      {date: fmt(dPlus(p,40)), type:'업그레이드', memo:`${o.total}→${o.total+1} 픽 업그레이드`, amount:`+$20.00`}];
+    default: return [
+      {date: fmt(p), type:'구매', memo:`${o.city} ${o.type} ${o.total}픽 구매`, amount:`$${(99+o.total*6).toFixed(2)}`},
+      {date: fmt(dPlus(p,2)), type:'상품담기', memo:'뮤지엄 패스 담기', amount:'$0.00'},
+      {date: fmt(dPlus(p,18)), type:'다운그레이드', memo:`${o.total}→${Math.max(2,o.total-2)} 픽 다운`, amount:`-$15.00`}];
+  }
+}
+
+function buildSelections(o, idx){
+  const items=['Summit One Vanderbilt','Statue of Liberty Cruise','Top of the Rock','Edge NYC','9/11 Memorial Museum'];
+  const acts=['담기','이용','취소'];
+  const baseDate=new Date(o.purchase);
+  const rows=[];
+  const cnt=2+Math.floor(Math.random()*3);
+  for(let i=0;i<cnt;i++){
+    const product=randPick(items); const act=randPick(acts);
+    const dayOffset=1+Math.floor(Math.random()*30);
+    const useDate=act==='이용'? fmt(dPlus(baseDate,dayOffset)) : (act==='취소'? '-' : fmt(dPlus(baseDate,dayOffset)));
+    const extra = Math.random()<0.3 ? `$${(Math.random()<0.5?0:5).toFixed(2)}` : '$0.00';
+    rows.push({product, reserved:'불필요', action:act, date:useDate, extra});
+  }
+  return rows;
+}
+
+function renderOrders(){
+  const tbody=document.querySelector('#ordersTable tbody');
+  tbody.innerHTML='';
+  orders.forEach(o=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${o.id}</td><td>${o.orderId}</td><td>${o.nickname}</td><td>${o.buyer}</td><td>${o.phone}</td><td>${o.email}</td><td>${o.city}</td><td>${o.type}</td><td>${o.premium?'Yes':'No'}</td><td>${o.used}/${o.total}</td><td>${o.expire}</td><td>${o.upgradeLimit}</td><td>${o.status}</td><td><div class='row'><button class='ghost btnDown'>다운그레이드</button><button class='ghost btnUp'>업그레이드</button><button class='ghost btnRefund'>취소/환불</button></div></td>`;
+    tr.querySelectorAll('.btnDown,.btnUp,.btnRefund').forEach(b=>{
+      b.addEventListener('click',(ev)=>{ev.stopPropagation(); alert(b.classList.contains('btnDown')?'다운그레이드 진행: '+o.id:b.classList.contains('btnUp')?'업그레이드 진행: '+o.id:'취소/환불 진행: '+o.id);});
+    });
+    tr.addEventListener('click',()=>renderDetail(o));
+    tbody.appendChild(tr);
+  });
+}
+
+function renderDetail(o){
+  const el=document.getElementById('detail');
+  const historyRows=o.history.map(h=>`<tr><td>${h.date}</td><td>${h.type}</td><td>${h.memo}</td><td style="text-align:right">${h.amount}</td></tr>`).join('');
+  const selRows=o.selections.map(s=>`<tr><td>${s.product}</td><td>${s.reserved}</td><td>${s.action}</td><td>${s.date}</td><td style="text-align:right">${s.extra}</td></tr>`).join('');
+  el.innerHTML = `
+    <div class="row"><span class="pill">ID</span><span>${o.id}</span><span class="pill" style="margin-left:auto">${o.status}</span></div>
+    <div class="row"><label>주문 ID</label><div>${o.orderId}</div></div>
+    <div class="row"><label>구매자명</label><div>${o.buyer}</div></div>
+    <div class="row"><label>전화번호</label><div>${o.phone}</div></div>
+    <div class="row"><label>이메일</label><div>${o.email}</div></div>
+    <div class="row"><label>도시</label><div>${o.city}</div></div>
+    <div class="row"><label>타입</label><div>${o.type}</div></div>
+    <div class="row"><label>프리미엄+</label><div>${o.premium?'Yes':'No'}</div></div>
+    <div class="row"><label>사용/총</label><div>${o.used} / ${o.total}</div></div>
+    <div class="row"><label>유효기간</label><div>${o.expire}</div></div>
+    <div class="row"><label>업그레이드 기한</label><div>${o.upgradeLimit}</div></div>
+    <div class="row"><label>구매일</label><div>${o.purchase}</div></div>
+    <hr style="border-color:var(--line)">
+    <div style="font-weight:700;margin:6px 0">이력 (타임라인)</div>
+    <table style="width:100%">
+      <thead><tr><th style="width:110px">날짜</th><th style="width:100px">이벤트</th><th>메모</th><th style="text-align:right;width:120px">금액</th></tr></thead>
+      <tbody>${historyRows}</tbody>
+    </table>
+    <div style="font-weight:700;margin:16px 0 6px">상품 담기/이용 이력</div>
+    <table style="width:100%">
+      <thead><tr><th>상품</th><th style="width:100px">예약</th><th style="width:80px">구분</th><th style="width:110px">일자</th><th style="text-align:right;width:120px">추가결제</th></tr></thead>
+      <tbody>${selRows}</tbody>
+    </table>
+  `;
+}
+
+/* Init */
+renderOrders();
+</script>
+</body>
+</html>
