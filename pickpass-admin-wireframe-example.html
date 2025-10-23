@@ -47,12 +47,30 @@
     table{border-collapse:collapse;width:100%}
     th,td{border-bottom:1px solid var(--line);padding:10px}
     th{text-align:left;color:var(--sub);background:#f1f5f9}
-    .scroll-x{overflow-x:auto}
+    .scroll-x{overflow-x:auto;min-width:0}
 
-    .split{display:grid;grid-template-columns:1fr 420px;gap:16px}
-    @media (max-width:1100px){.layout{grid-template-columns:1fr}.split{grid-template-columns:1fr}}
+    .split{display:flex;gap:16px}
+    .split > .scroll-x { flex: 1 1 0; }
+    .split > aside { flex: 0 0 420px; }
+    @media (max-width:1100px){.layout{grid-template-columns:1fr}.split{flex-direction:column}}
 
     .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#0ea5e9;color:#fff;padding:12px 16px;border-radius:10px;display:none;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+
+    /* Custom Scrollbar for .scroll-x */
+    .scroll-x::-webkit-scrollbar {
+        height: 10px;
+    }
+    .scroll-x::-webkit-scrollbar-track {
+        background: #f0f2f5;
+        border-radius: 4px;
+    }
+    .scroll-x::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+    .scroll-x::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
   </style>
 </head>
 <body>
@@ -91,7 +109,7 @@
                 <div class="row"><label>통화</label><span class="pill">USD ($)</span></div>
                 <div class="row"><label>최소 PICK</label><span class="pill">2</span></div>
 
-                <div class="row"><label for="maxPick">최대 PICK</label><input id="maxPick" type="number" min="2" step="1" value="12" /><span class="hint">변경 시 가격 테이블 행이 동적으로 생성됩니다.</span></div>
+                <div class="row"><label for="maxPick">최대 PICK</label><input id="maxPick" type="number" min="2" step="1" value="12" readonly /><span class="hint">이 값은 도시에 따라 고정됩니다.</span></div>
                 <div class="row"><label for="adultPP">Adult Premium Plus $</label><input id="adultPP" type="number" min="0" step="0.01" value="0" /></div>
                 <div class="row"><label for="childPP">Child Premium Plus $</label><input id="childPP" type="number" min="0" step="0.01" value="0" /></div>
                 <div class="row"><label for="validity">구매 후 사용 시작 데드라인(일)</label><input id="validity" type="number" min="1" step="1" value="365" /></div>
@@ -104,13 +122,12 @@
             <div class="head">
               <div>가격 테이블 (PICK 별)</div>
               <div>
-                <button class="ghost" id="btnDraftWarn">버전 업 경고 테스트</button>
                 <button class="primary" id="btnSavePolicy">저장</button>
               </div>
             </div>
             <div class="body">
-              <div class="hint">모든 금액은 USD($), 소수점 2자리까지 입력. 빈 칸이 있으면 저장 불가.</div>
-              <table id="priceTable"><thead><tr><th>PICK</th><th>Adult Price $</th><th>Child Price $</th></tr></thead><tbody id="priceTbody"></tbody></table>
+              <div class="hint">상품을 선택하면 가격이 자동 입력(읽기 전용)됩니다. 빈 칸/미선택이 있으면 저장 불가.</div>
+              <table id="priceTable"><thead><tr><th>PICK</th><th>매핑된 상품 ID</th><th>Adult Price $</th><th>Child Price $</th></tr></thead><tbody id="priceTbody"></tbody></table>
               <div id="tableMsg" class="hint" style="margin-top:8px"></div>
             </div>
           </div>
@@ -145,8 +162,7 @@
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1800) }
-function pad3(n){ return String(n).padStart(3,'0'); }
-function incPolicyId(id){ const m = id.match(/^(.*?)(\d+)$/); if(!m) return id + '_001'; const prefix = m[1]; const num = parseInt(m[2],10) + 1; return prefix + pad3(num); }
+function incPolicyId(id){ const m = id.match(/^(.*?)(\d+)$/); if(!m) return id + '_001'; const prefix = m[1]; const num = parseInt(m[2],10) + 1; return prefix + String(num).padStart(3,'0'); }
 function randomDigits(n){return Array.from({length:n},()=>Math.floor(Math.random()*10)).join('');}
 function randomName(){const n=['김','이','박','최','정','한','유','장','임','오'];const m=['민수','지현','도윤','예진','서준','하린','지후','다은','하준','유진'];return n[Math.floor(Math.random()*n.length)]+m[Math.floor(Math.random()*m.length)];}
 function randomPhone(){return '010-'+randomDigits(4)+'-'+randomDigits(4);}
@@ -161,10 +177,25 @@ const state = {
   currentView: 'policy',
   currentCity: '',
   tableDirty: false,
+  products: {
+    NYC: Array.from({length: 11}, (_, i) => ({
+      id: `PROD_NYC_${String(i + 2).padStart(2, '0')}`,
+      name: `뉴욕 픽패스 ${i + 2}`,
+      adultPrice: (89 + i * 25.5).toFixed(2),
+      childPrice: (85 + i * 25.5).toFixed(2),
+    })),
+    CUN: Array.from({length: 5}, (_, i) => ({
+      id: `PROD_CUN_${String(i + 2).padStart(2, '0')}`,
+      name: `칸쿤 픽패스 ${i + 2}`,
+      adultPrice: (79 + i * 22.5).toFixed(2),
+      childPrice: (75 + i * 22.5).toFixed(2),
+    })),
+  },
   data: {
     NYC: { policyId: 'NY_PASS_001', maxPick: 12, adultPP: 0, childPP: 0, validity: 365, partialRefund: 30, prices: {} },
-    CUN: { policyId: 'CUN_PASS_001', maxPick: 10, adultPP: 0, childPP: 0, validity: 365, partialRefund: 30, prices: {} }
-  }
+    CUN: { policyId: 'CUN_PASS_001', maxPick: 6, adultPP: 0, childPP: 0, validity: 365, partialRefund: 30, prices: {} }
+  },
+  mappedProducts: new Set(),
 };
 
 /* ---------- GNB Switching ---------- */
@@ -193,14 +224,17 @@ const partialRefundEl = $('#partialRefund');
 const priceCard = $('#priceCard');
 const priceTbody = $('#priceTbody');
 const tableMsg = $('#tableMsg');
-let lastMax = 0;
 
 btnCitySelect.addEventListener('click', ()=>{
   const city = citySel.value;
   if(!city){ alert('도시를 선택하세요.'); return; }
   state.currentCity = city;
   state.tableDirty = false;
+  
   const s = state.data[city];
+  s.prices = {}; // Reset prices on city change
+  state.mappedProducts.clear();
+
   basicSettings.style.display = 'block';
   priceCard.style.display = 'block';
   policyStatus.textContent = 'Active';
@@ -210,61 +244,139 @@ btnCitySelect.addEventListener('click', ()=>{
   childPPEl.value = Number(s.childPP).toFixed(2);
   validityEl.value = s.validity;
   partialRefundEl.value = s.partialRefund;
-  buildPriceRows(s.maxPick, s.prices);
+  
+  buildPriceRows();
 });
 
-function numInput(val){
+function numInput(val, isReadonly){
   const i=document.createElement('input');
-  i.type='number'; i.min='0'; i.step='0.01'; i.required=true; i.value=val ?? '';
+  i.type='number'; i.min='0'; i.step='0.01'; i.required=true;
+  i.value=val ?? '';
+  i.readOnly = isReadonly;
   i.addEventListener('input',()=>state.tableDirty=true);
   return i;
 }
 
-function buildPriceRows(max, prices){
-  priceTbody.innerHTML = '';
-  for(let pick=2; pick<=max; pick++){
-    const tr = document.createElement('tr');
-    const tdPick = document.createElement('td'); tdPick.textContent = `PICK ${pick}`;
-    const tdA = document.createElement('td'); const a = numInput(prices[`A-${pick}`]); tdA.appendChild(a);
-    const tdC = document.createElement('td'); const c = numInput(prices[`C-${pick}`]); tdC.appendChild(c);
-    tr.append(tdPick, tdA, tdC); priceTbody.appendChild(tr);
-  }
-  lastMax = max;
-  tableMsg.textContent = `총 ${max-1}개 행 (PICK 2 ~ ${max})`;
+function productInput(pick, currentProductId) {
+    const sel = document.createElement('select');
+    sel.required = true;
+    sel.dataset.pick = pick;
+    const cityProducts = state.products[state.currentCity] || [];
+
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = '상품 선택';
+    sel.appendChild(defaultOption);
+
+    cityProducts.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.name} (${p.id})`;
+        
+        // Disable if mapped elsewhere, but not if it's the current row's selection
+        if (state.mappedProducts.has(p.id) && p.id !== currentProductId) {
+            opt.disabled = true;
+        }
+        if (p.id === currentProductId) {
+            opt.selected = true;
+        }
+        sel.appendChild(opt);
+    });
+    return sel;
 }
 
-maxPickEl.addEventListener('change', e=>{
-  const next = Math.max(2, parseInt(e.target.value||'2',10));
+function buildPriceRows() {
   const s = state.data[state.currentCity];
-  if(!s){ e.target.value = 2; return; }
-  if(next < lastMax){ alert('경고: max_pick 감소 시 초과 PICK은 숨김(Draft) 처리되며 정책 버전업이 필요합니다.'); }
-  s.maxPick = next; state.tableDirty = true; buildPriceRows(next, s.prices);
+  if (!s) return;
+
+  priceTbody.innerHTML = '';
+  state.mappedProducts.clear();
+  // First, register all currently mapped products
+  for (let pick = 2; pick <= s.maxPick; pick++) {
+    const priceData = s.prices[pick];
+    if (priceData && priceData.productId) {
+      state.mappedProducts.add(priceData.productId);
+    }
+  }
+
+  for (let pick = 2; pick <= s.maxPick; pick++) {
+    const tr = document.createElement('tr');
+    const priceData = s.prices[pick] || {};
+    const isProductSelected = !!priceData.productId;
+
+    const tdPick = document.createElement('td');
+    tdPick.textContent = `PICK ${pick}`;
+
+    const tdProd = document.createElement('td');
+    const p = productInput(pick, priceData.productId);
+    tdProd.appendChild(p);
+
+    const tdA = document.createElement('td');
+    const a = numInput(priceData.adult, true);
+    tdA.appendChild(a);
+
+    const tdC = document.createElement('td');
+    const c = numInput(priceData.child, true);
+    tdC.appendChild(c);
+
+    tr.append(tdPick, tdProd, tdA, tdC);
+    priceTbody.appendChild(tr);
+  }
+  tableMsg.textContent = `총 ${s.maxPick - 1}개 행 (PICK 2 ~ ${s.maxPick})`;
+}
+
+priceTbody.addEventListener('change', (e) => {
+  if (e.target.tagName === 'SELECT') {
+    const sel = e.target;
+    const pick = parseInt(sel.dataset.pick, 10);
+    const productId = sel.value;
+    const s = state.data[state.currentCity];
+
+    // Find product data
+    const product = state.products[state.currentCity].find(p => p.id === productId);
+
+    if (product) {
+      s.prices[pick] = {
+        productId: product.id,
+        adult: product.adultPrice,
+        child: product.childPrice,
+      };
+    } else {
+      // Unselected
+      delete s.prices[pick];
+    }
+    
+    state.tableDirty = true;
+    buildPriceRows(); // Re-render the table to update dropdowns and prices
+  }
 });
 
 $('#btnSavePolicy').addEventListener('click', ()=>{
   if(!state.currentCity){ alert('도시를 먼저 선택하세요.'); return; }
-  const inputs = priceTbody.querySelectorAll('input');
-  for(const i of inputs){ if(i.value===''){ alert('모든 가격 칸을 입력하세요.'); return; } }
+  
   const s = state.data[state.currentCity];
+  // Validate that all rows have a product mapped
+  for (let i = 2; i <= s.maxPick; i++) {
+    if (!s.prices[i] || !s.prices[i].productId) {
+      alert(`PICK ${i} 행의 상품을 선택해주세요.`);
+      return;
+    }
+  }
+
   s.adultPP = parseFloat(adultPPEl.value||'0');
   s.childPP = parseFloat(childPPEl.value||'0');
   s.validity = parseInt(validityEl.value||'365',10);
   s.partialRefund = parseInt(partialRefundEl.value||'30',10);
-  s.prices = {};
-  let pick = 2;
-  for(const tr of priceTbody.querySelectorAll('tr')){
-    const [a,c] = tr.querySelectorAll('input');
-    s.prices[`A-${pick}`] = parseFloat(a.value);
-    s.prices[`C-${pick}`] = parseFloat(c.value);
-    pick++;
-  }
+
   if(state.tableDirty){
     s.policyId = incPolicyId(s.policyId);
     policyIdEl.textContent = s.policyId;
     state.tableDirty = false;
   }
+  console.log("Saved Data:", JSON.parse(JSON.stringify(s)));
   toast('저장되었습니다. (도시 설정 및 테이블 갱신)');
 });
+
 
 /* ---------- Orders View (5 samples + history) ---------- */
 const orders = [];
@@ -340,7 +452,7 @@ function renderOrders(){
     });
     tr.addEventListener('click',()=>renderDetail(o));
     tbody.appendChild(tr);
-  });
+});
 }
 
 function renderDetail(o){
