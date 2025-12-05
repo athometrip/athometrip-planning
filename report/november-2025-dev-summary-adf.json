@@ -1,0 +1,426 @@
+{
+  "version": 1,
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": { "level": 1 },
+      "content": [{ "type": "text", "text": "2025년 11월 개발 작업 현황" }]
+    },
+    {
+      "type": "panel",
+      "attrs": { "panelType": "info" },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            { "type": "text", "text": "작성일: 2025-12-05 | 데이터 수집 기간: 2025-11-01 ~ 2025-11-30", "marks": [{ "type": "strong" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 2 },
+      "content": [{ "type": "text", "text": "데이터 수집 방법" }]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        { "type": "text", "text": "본 문서의 데이터는 MCP(Model Context Protocol) 도구를 통해 실시간으로 수집되었습니다." }
+      ]
+    },
+    {
+      "type": "table",
+      "attrs": { "isNumberColumnEnabled": false, "layout": "default" },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "데이터 소스" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "API" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "조회 조건" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "수집 시점" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Jira" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Atlassian REST API v3" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "project=PRODUCT AND updated>=2025-11-01 AND updated<=2025-11-30" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "2025-12-05" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "GitHub" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "git log (local)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "--since=2025-11-01 --until=2025-12-01" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "2025-12-05" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Figma" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Figma REST API v1" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "file key: PuaTrGTcY3Q5OU7UFClAOo" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "2025-12-05 (lastModified: 2025-12-04)" }] }] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 2 },
+      "content": [{ "type": "text", "text": "1. 정량적 성과" }]
+    },
+    {
+      "type": "table",
+      "attrs": { "isNumberColumnEnabled": false, "layout": "default" },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "항목" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "수치" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "산출 근거" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Jira 이슈" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "100건+" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Jira API search/jql 결과 (maxResults: 100, isLast: false)" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "GitHub 커밋 (전체)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "415건" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "git log --all --oneline | wc -l" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "- athometrip-springboot" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "260건 (62.7%)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "백엔드 레포지토리" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "- athometrip-front" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "155건 (37.3%)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "프론트엔드 레포지토리" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Figma 진척률" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "50% (9/18)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "(완료 7개 + 진행중 2개) / 전체 18개 캔버스" }] }] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 2 },
+      "content": [{ "type": "text", "text": "2. 주요 작업 카테고리" }]
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 3 },
+      "content": [{ "type": "text", "text": "[픽패스] Pickpass 서비스" }]
+    },
+    {
+      "type": "table",
+      "attrs": { "isNumberColumnEnabled": false, "layout": "default" },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Jira" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "작업 내용" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "상태" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "GitHub Commit" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1202" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[ADMIN] 픽패스 주문 관리 UI 개선" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1193" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[API] 픽패스 다운그레이드 API 기능 개발" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1192" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[ADMIN, API] 픽패스 주문 상세 조회 및 결제 금액 계산 로직 개선" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1094" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[API] 상품 리스트 조회에 픽패스 사용 여부 필터링 추가" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "dc417452 (2025-11-18)" }] }] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 3 },
+      "content": [{ "type": "text", "text": "[마이페이지] MyPage" }]
+    },
+    {
+      "type": "table",
+      "attrs": { "isNumberColumnEnabled": false, "layout": "default" },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Jira" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "작업 내용" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "상태" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "GitHub Commit" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Figma Node" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1186" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[Front] 마이페이지 > 회원정보 수정" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "341:3907" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1189" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[Front] 마이페이지 > 주문내역 > 취소/변경접수" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1175" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[API] 회원정보 수정" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1091" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[API, DOMAIN] 마이페이지 주문 상세 조회 기능 개선" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "119c1efc (2025-11-18)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1146" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[API, COMMON] 전화번호 및 비밀번호 유효성 검증 개선" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "bc15de2c (2025-11-24)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 3 },
+      "content": [{ "type": "text", "text": "[파트너센터] PartnerCenter" }]
+    },
+    {
+      "type": "table",
+      "attrs": { "isNumberColumnEnabled": false, "layout": "default" },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Jira" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "작업 내용" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "상태" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "GitHub Commit" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1085" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[ADMIN] 파트너센터 관리자 계정 관리 페이지 추가" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "1e128dc3 (2025-11-19)" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1086" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[PARTNERCENTER] 주문 리스트에 체크아웃 폼 데이터 표시 기능 추가" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "1d9958bc (2025-11-18)" }] }] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 3 },
+      "content": [{ "type": "text", "text": "[바우처/결제] Voucher/Payment" }]
+    },
+    {
+      "type": "table",
+      "attrs": { "isNumberColumnEnabled": false, "layout": "default" },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Jira" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "작업 내용" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "상태" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Figma Node" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1199" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[DOMAIN] 바우처 메일 전송 시 만료일 제거" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1195" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "[기획] 장바구니 사용 플로우 변경 요청" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "341:3909" }] }] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": { "level": 2 },
+      "content": [{ "type": "text", "text": "3. Figma 디자인 현황" }]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        { "type": "text", "text": "파일: ", "marks": [{ "type": "strong" }] },
+        { "type": "text", "text": "신규 통합기획문서" }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        { "type": "text", "text": "마지막 수정: ", "marks": [{ "type": "strong" }] },
+        { "type": "text", "text": "2025-12-04T08:13:27Z (Figma API lastModified)" }
+      ]
+    },
+    {
+      "type": "table",
+      "attrs": { "isNumberColumnEnabled": false, "layout": "default" },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "상태" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "개수" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "캔버스 목록" }] }] },
+            { "type": "tableHeader", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "연결 Jira 티켓" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "완료" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "7개" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "공통/헤더/GNB, 메인, 티켓투어, 공항이동, 유심/이심, 이벤트" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "진행중 (2단계)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "2개" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "마이페이지 (341:3907), 장바구니/결제 (341:3909)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1186, PRD-1189, PRD-1195" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "예정 (3단계)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "4개" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "위시리스트, 앳홈스테이, 매거진, 픽패스 (387:487)" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "PRD-1094, PRD-1192, PRD-1193, PRD-1202" }] }] }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "보류/기타" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "5개" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "칸쿤호텔, 앳홈스튜디오, 미선택시안 아카이빙, 인사이트 요약, 상품등록" }] }] },
+            { "type": "tableCell", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "-" }] }] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": { "panelType": "note" },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            { "type": "text", "text": "진척률 산출: ", "marks": [{ "type": "strong" }] },
+            { "type": "text", "text": "(완료 7개 + 진행중 2개) / 전체 18개 = 50%. 캔버스 이름에 포함된 상태 표시 기호(완료, 진행중 2단계, 예정 3단계, 보류)를 기준으로 분류함." }
+          ]
+        }
+      ]
+    }
+  ]
+}
